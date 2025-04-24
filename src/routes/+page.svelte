@@ -29,7 +29,7 @@
         const todoEl = event.target as HTMLInputElement;
 
         // Get the input value (the task text)
-        const text = todoEl.value;
+        const text = todoEl.value.trim();
 
         // Set the default state of the task as not done
         const done = false;
@@ -52,51 +52,142 @@
 	}
 </script>
 
-<input type="text" onkeydown={addTodo} placeholder="Agregar tarea" />
-
-<div class="todos">
-    <table>
-        <thead>
-          <tr>
-            <th>Tarea</th>
-            <th>Completada</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each todos as todo, i}
-            <tr>
-              <td>
-                <p>{todo.text}</p>
-              </td>
-              <td>
-                <input type="checkbox" 
-                       onchange={(event) => toggleTodo(event, i)} 
-                       data-index={i} 
-                       checked={todo.done} />
-              </td>
-              <td>
-                {#if todo.done}
-                  <p>Tarea completada</p>
-                {:else}
-                  <p>Tarea pendiente</p>
-                {/if}
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-    </table>
+<div class="container">
+    <h1>Lista de Tareas</h1>
+    <div class="input-container">
+        <input type="text" onkeydown={addTodo} placeholder="Agregar tarea" maxlength="20" />
+    </div>
+    <div class="todos">
+        {#if todos.length === 0}
+            <p class="empty">No hay tareas en este momento.</p>
+        {:else}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tarea</th>
+                        <th>Completar</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each todos as todo, i}
+                        <tr class:completed={todo.done}>
+                            <td class:completed={todo.done}>
+                                {todo.text}
+                            </td>
+                            <td>
+                                <input type="checkbox" 
+                                    onchange={(event) => toggleTodo(event, i)} 
+                                    data-index={i} 
+                                    checked={todo.done} />
+                            </td>
+                            <td>
+                                {todo.done ? 'Tarea completada' : 'Tarea pendiente'}
+                            </td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        {/if}    
+    </div>
 </div>
 
 <style>
+    :global(body) {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 600px;
+        padding: 2rem;
+        margin-top: 2rem;
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #4f46e5;
+    }
+
+    .input-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .input-container input[type='text'] {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 2px solid #ddd;
+        border-radius: 0.5rem;
+        outline: none;
+        transition: border 0.2s;
+    }
+
+    .input-container input[type='text']:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+
 	.todos {
-		display: grid;
-		gap: 1rem;
-		margin-block-start: 1rem;
+		margin-top: 1rem;
 	}
 
-    input[type='text'] {
-		width: 70%;
-		padding: 1rem;
-	}
+    .empty {
+        text-align: center;
+        color: #888;
+        padding: 1rem;
+        background-color: #f0f0f5;
+        border-radius: 0.5rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background-color: #4f46e5;
+        color: white;
+    }
+
+    th,
+    td {
+        padding: 0.75rem;
+        text-align: left;
+    }
+
+    tr {
+        transition: background-color 0.2s;
+    }
+
+    tr.completed {
+        color: #888;
+        background-color: #e8f5e9;
+    }
+
+    tr.completed td {
+        color: #888;
+    }
+
+    td.completed {
+        text-decoration: line-through;
+    }
+
+    input[type='checkbox'] {
+        transform: scale(1.2);
+        cursor: pointer;
+    }
 </style>
