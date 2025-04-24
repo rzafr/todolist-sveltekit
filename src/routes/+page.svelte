@@ -47,7 +47,7 @@
 
 		// Create a new array with updated task
         todos = todos.map((todo, i) =>
-            i === index ? { ...todo, done: !todo.done } : todo
+            i === index ? { ...todo, done: inputEl.checked } : todo
         );
 	}
 </script>
