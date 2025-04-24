@@ -1,11 +1,23 @@
 <script lang="ts">
-    let todos = $state([
-        { text: 'Todo 1', done: false },
-        { text: 'Todo 2', done: false },
-    ]);
+    type Todo = {
+		text: string,
+		done: boolean
+	}
+
+    let todos = $state<Todo[]>([]);
 
     $effect(() => {
-		console.log(todos);
+        // Retrieve the 'todos' item from localStorage and store it in the variable savedTodos
+		const savedTodos = localStorage.getItem('todos');
+
+        // If there are saved todos in localStorage, parse them from JSON and assign to the todos array
+        if (savedTodos) {
+            todos = JSON.parse(savedTodos);
+        }
+	});
+
+    $effect(() => {
+		localStorage.setItem('todos', JSON.stringify(todos));
 	})
 
     function addTodo(event: KeyboardEvent) {
@@ -29,12 +41,9 @@
         todoEl.value = '';
     }
 
-    function toggleTodo(event: Event) {
+    function toggleTodo(event: Event, index: number) {
         // Cast the event target to an input element
 		const inputEl = event.target as HTMLInputElement;
-
-        // Extract the index from the dataset (it's a string, so we convert it)
-		const index = +inputEl.dataset.index!;
 
 		// Create a new array with updated task
         todos = todos.map((todo, i) =>
@@ -43,15 +52,40 @@
 	}
 </script>
 
-<input onkeydown={addTodo} placeholder="Add todo" type="text" />
+<input type="text" onkeydown={addTodo} placeholder="Agregar tarea" />
 
 <div class="todos">
-    {#each todos as todo, i}
-        <div class="todo">
-            <input value={todo.text} type="text">
-            <input onchange={toggleTodo} data-index={i} checked={todo.done} type="checkbox">
-        </div>    
-    {/each}
+    <table>
+        <thead>
+          <tr>
+            <th>Tarea</th>
+            <th>Completada</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each todos as todo, i}
+            <tr>
+              <td>
+                <p>{todo.text}</p>
+              </td>
+              <td>
+                <input type="checkbox" 
+                       onchange={(event) => toggleTodo(event, i)} 
+                       data-index={i} 
+                       checked={todo.done} />
+              </td>
+              <td>
+                {#if todo.done}
+                  <p>Tarea completada</p>
+                {:else}
+                  <p>Tarea pendiente</p>
+                {/if}
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+    </table>
 </div>
 
 <style>
@@ -61,19 +95,8 @@
 		margin-block-start: 1rem;
 	}
 
-	.todo {
-		position: relative;
-	}
-
     input[type='text'] {
-		width: 100%;
+		width: 70%;
 		padding: 1rem;
-	}
-
-	input[type='checkbox'] {
-		position: absolute;
-		right: 4%;
-		top: 50%;
-		translate: 0% -50%;
 	}
 </style>
