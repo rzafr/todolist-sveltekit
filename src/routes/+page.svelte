@@ -1,4 +1,5 @@
 <script lang="ts">
+
     type Todo = {
 		text: string,
 		done: boolean
@@ -17,13 +18,13 @@
 	});
 
     $effect(() => {
+        // Convert the 'todos' array into a JSON string and store it in localStorage
 		localStorage.setItem('todos', JSON.stringify(todos));
 	})
 
-    function addTodo(event: KeyboardEvent) {
+    function addTodo(event: KeyboardEvent): void {
         // Only proceed if the pressed key is "Enter"
-        if (event.key !== 'Enter') 
-            return;
+        if (event.key !== 'Enter') return;
 
         // Cast the event target to an input element
         const todoEl = event.target as HTMLInputElement;
@@ -41,7 +42,7 @@
         todoEl.value = '';
     }
 
-    function toggleTodo(event: Event, index: number) {
+    function toggleTodo(event: Event, index: number): void {
         // Cast the event target to an input element
 		const inputEl = event.target as HTMLInputElement;
 
@@ -189,5 +190,50 @@
     input[type='checkbox'] {
         transform: scale(1.2);
         cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .input-container input[type='text'] {
+            font-size: 0.95rem;
+            padding: 0.6rem 0.9rem;
+        }
+
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+            display: block;
+            width: 95%;
+        }
+
+        thead {
+            display: none;
+        }
+
+        tr {
+            background-color: white;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+        }
+
+        td {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        td:last-child {
+            border-bottom: none;
+        }
     }
 </style>
