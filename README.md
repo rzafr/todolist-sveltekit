@@ -1,38 +1,31 @@
-# sv
+# Pasos para arrancar el proyecto
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+El proyecto se puede arrancar en local.
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+# Tiempo invertido
 
-To create a production version of your app:
+El tiempo invertido ha sido de unas siete horas aproximadamente.
 
-```bash
-npm run build
-```
+# Decisiones técnicas
 
-You can preview the production build with `npm run preview`.
+Proyecto desarrollado en Svelte 5 por ser la última versión.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Uso de Typescript para reducir errores.
+
+La persistencia escogida ha sido localStorage que permite recuperar datos entre sesiones.
+
+# Siguientes pasos
+
+Intentar incorporar el gráfico de barras.
+
+Manejo de errores.
+
+Mejora del feedback al usuario.
+
+Prevenir inyecciones de código.
+
+Dockerización, despliegue.
